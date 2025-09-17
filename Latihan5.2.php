@@ -1,22 +1,59 @@
 <?php
-class Shape
+class warung
 {
-  const PI = 3.142;
-  function __call($name, $arg)
+  public $namaBarang;
+  public $harga;
+  public function __construct($namaBarang, $harga)
   {
-    if ($name == 'area')
-      switch (count($arg)) {
-        case 0:
-          return 0;
-        case 1:
-          return self::PI * $arg[0];
-        case 2:
-          return $arg[0] * $arg[1];
-      }
+    $this->namaBarang = $namaBarang;
+    $this->harga = $harga;
+
+  }
+  public function information()
+  {
+    echo "Barang $this->namaBarang, harga : Rp $this->harga<br>";
   }
 }
-$circle = new Shape();
-echo $circle->area(3);
-$rect = new Shape();
-echo $rect->area(8, 6);
+
+class Warung2 extends warung
+{
+  public $exp;
+
+  public function __construct($namaBarang, $harga, $exp)
+  {
+    parent::__construct($namaBarang, $harga);
+    $this->exp = $exp;
+  }
+  public function information()
+  {
+    echo "Barang2: $this->namaBarang, Harga: Rp $this->harga, Kadaluarsa: $this->exp<br>";
+  }
+}
+
+class Warung3
+{
+  public function __call($namaBarang, $x)
+  {
+    if ($namaBarang == "total") {
+      if (count($x) == 1) {
+        return $x[0];
+
+      } else if (count($x) == 2) {
+        return $x[0] * $x[1];
+      } else {
+        return 0;
+      }
+    }
+  }
+}
+
+$barang1 = new Warung("Susu kotak", 6000);
+$barang1->information();
+
+$barang2 = new Warung2("Yogurt", 12000, "15-11-2025");
+$barang2->information();
+
+$barang3 = new Warung3();
+echo "Harga Indomie setelah diskon: Rp" . $barang3->total(4000) . "<br>";
+echo "harga telur: RP" . $barang3->total(2000, 5) . "<br>";
 ?>
